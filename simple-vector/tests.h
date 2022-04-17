@@ -418,7 +418,7 @@ void TestNamedMoveOperator() {
 }
 
 void TestNoncopiableMoveConstructor() {
-    /*const size_t size = 5;
+    const size_t size = 5;
     std::cout << "Test noncopiable object, move constructor" << std::endl;
     SimpleVector<X> vector_to_move;
     for (size_t i = 0; i < size; ++i) {
@@ -436,7 +436,7 @@ void TestNoncopiableMoveConstructor() {
 }
 
 void TestNoncopiablePushBack() {
-    /*const size_t size = 5;
+    const size_t size = 5;
     std::cout << "Test noncopiable push back" << std::endl;
     SimpleVector<X> v;
     for (size_t i = 0; i < size; ++i) {
@@ -452,7 +452,7 @@ void TestNoncopiablePushBack() {
 }
 
 void TestNoncopiableInsert() {
-    /*const size_t size = 5;
+    const size_t size = 5;
     std::cout << "Test noncopiable insert" << std::endl;
     SimpleVector<X> v;
     for (size_t i = 0; i < size; ++i) {
@@ -475,7 +475,7 @@ void TestNoncopiableInsert() {
 }
 
 void TestNoncopiableErase() {
-    /*const size_t size = 3;
+    const size_t size = 3;
     std::cout << "Test noncopiable erase" << std::endl;
     SimpleVector<X> v;
     for (size_t i = 0; i < size; ++i) {
