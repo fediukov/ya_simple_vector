@@ -332,7 +332,7 @@ public:
     }
 
     Iterator Erase(ConstIterator pos) {
-        assert(pos >= begin() && pos <= end());
+        assert(pos >= begin() && pos < end());
         Iterator it = const_cast<Iterator>(pos);
         if (it != end())
         {

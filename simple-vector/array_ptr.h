@@ -24,39 +24,16 @@ public:
         }
     }
 
-    explicit ArrayPtr(size_t&& size) {
-        if (size)
-        {
-            raw_ptr_ = new Type[std::move(size)];
-        }
-        else
-        {
-            raw_ptr_ = nullptr;
-        }
+    ArrayPtr(ArrayPtr&& rhs)
+    {
+        raw_ptr_ = std::move(rhs.raw_ptr_);
+        rhs.raw_ptr_ = nullptr;
     }
 
-    ArrayPtr& operator=(const size_t& size)
+    ArrayPtr& operator=(ArrayPtr&& rhs)
     {
-        if (size)
-        {
-            raw_ptr_ = new Type[size];
-        }
-        else
-        {
-            raw_ptr_ = nullptr;
-        }
-    }
-
-    ArrayPtr& operator=(size_t&& size)
-    {
-        if (size)
-        {
-            raw_ptr_ = new Type[std::move(size)];
-        }
-        else
-        {
-            raw_ptr_ = nullptr;
-        }
+        raw_ptr_ = std::move(rhs.raw_ptr_);
+        rhs.raw_ptr_ = nullptr;
     }
 
     // Конструктор из сырого указателя, хранящего адрес массива в куче либо nullptr
