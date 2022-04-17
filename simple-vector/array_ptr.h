@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
+#include <utility>
 
 template <typename Type>
 class ArrayPtr {
@@ -11,11 +12,46 @@ public:
 
     // Создаёт в куче массив из size элементов типа Type.
     // Если size == 0, поле raw_ptr_ должно быть равно nullptr
-    explicit ArrayPtr(size_t size) {
+    explicit ArrayPtr(const size_t& size) {
         if (size)
         {
             raw_ptr_ = new Type[size];
             //for (auto i = 0; i != size; ++i) std::cout << &raw_ptr_[i] << " "; std::cout << std::endl;
+        }
+        else
+        {
+            raw_ptr_ = nullptr;
+        }
+    }
+
+    explicit ArrayPtr(size_t&& size) {
+        if (size)
+        {
+            raw_ptr_ = new Type[std::move(size)];
+        }
+        else
+        {
+            raw_ptr_ = nullptr;
+        }
+    }
+
+    ArrayPtr& operator=(const size_t& size)
+    {
+        if (size)
+        {
+            raw_ptr_ = new Type[size];
+        }
+        else
+        {
+            raw_ptr_ = nullptr;
+        }
+    }
+
+    ArrayPtr& operator=(size_t&& size)
+    {
+        if (size)
+        {
+            raw_ptr_ = new Type[std::move(size)];
         }
         else
         {

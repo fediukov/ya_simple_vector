@@ -117,11 +117,13 @@ public:
 
     // Возвращает ссылку на элемент с индексом index
     Type& operator[](size_t index) noexcept {
+        assert(index < size_);
         return *(vector_.Get() + index);
     }
 
     // Возвращает константную ссылку на элемент с индексом index
     const Type& operator[](size_t index) const noexcept {
+        assert(index < size_);
         return *(vector_.Get() + index);
     }
 
@@ -263,6 +265,7 @@ public:
 
     Iterator Insert(ConstIterator pos, const Type& value)
     {
+        assert(pos >= begin() && pos <= end());
         Iterator it = const_cast<Iterator>(pos);
         int dist = it - begin();
         if (size_ < capacity_)
@@ -291,6 +294,7 @@ public:
     // new new new new (for moving)
     Iterator Insert(ConstIterator pos, Type&& value)
     {
+        assert(pos >= begin() && pos <= end());
         Iterator it = const_cast<Iterator>(pos);
         int dist = it - begin();
         if (size_ < capacity_)
@@ -328,6 +332,7 @@ public:
     }
 
     Iterator Erase(ConstIterator pos) {
+        assert(pos >= begin() && pos <= end());
         Iterator it = const_cast<Iterator>(pos);
         if (it != end())
         {
