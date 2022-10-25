@@ -47,7 +47,7 @@ public:
     {
     }
 
-=    SimpleVector(size_t size, const Type& value)
+    SimpleVector(size_t size, const Type& value)
         : size_(size), capacity_(size), vector_(size)
     {
         std::fill(vector_.Get(), vector_.Get() + size_, Type{ value });
