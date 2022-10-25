@@ -1,16 +1,13 @@
 #pragma once
+
 #include <cassert>
 #include <iostream>
 #include <numeric>
 #include <stdexcept>
 #include <utility>
 
-// У функции, объявленной со спецификатором inline, может быть несколько
-// идентичных определений в разных единицах трансляции.
-// Обычно inline помечают функции, чьё тело находится в заголовочном файле,
-// чтобы при подключении этого файла из разных единиц трансляции не возникало ошибок компоновки
 inline void Test1() {
-    // Инициализация конструктором по умолчанию
+    // check of default constructor
     {
         SimpleVector<int> v;
         assert(v.GetSize() == 0u);
@@ -19,7 +16,7 @@ inline void Test1() {
         std::cout << "Test 1.01 is done" << std::endl;
     }
 
-    // Инициализация вектора указанного размера
+    // check of size constructor
     {
         SimpleVector<int> v(5);
         assert(v.GetSize() == 5u);
@@ -32,7 +29,7 @@ inline void Test1() {
     }
 
 
-    // Инициализация вектора, заполненного заданным значением
+    // check of size and value constructor
     {
         SimpleVector<int> v(3, 42);
         assert(v.GetSize() == 3);
@@ -43,7 +40,7 @@ inline void Test1() {
         std::cout << "Test 1.03 is done" << std::endl;
     }
 
-    // Инициализация вектора при помощи initializer_list
+    // check of initializer_list constructor
     {
         SimpleVector<int> v{ 1, 2, 3 };
         assert(v.GetSize() == 3);
@@ -52,23 +49,26 @@ inline void Test1() {
         std::cout << "Test 1.04 is done" << std::endl;
     }
 
-    // Доступ к элементам при помощи At
+    // get Value with at
     {
         SimpleVector<int> v(3);
         assert(&v.At(2) == &v[2]);
         try {
             v.At(3);
-            assert(false);  // Ожидается выбрасывание исключения
+            // waiting for an exception to be thrown
+            assert(false);  
         }
         catch (const std::out_of_range&) {
         }
         catch (...) {
-            assert(false);  // Не ожидается исключение, отличное от out_of_range
+            
+            // not waiting for an exception other than out_of_range
+            assert(false);
         }
         std::cout << "Test 1.05 is done" << std::endl;
     }
 
-    // Очистка вектора
+    // check of Clear
     {
         SimpleVector<int> v(10);
         const size_t old_capacity = v.GetCapacity();
@@ -78,14 +78,12 @@ inline void Test1() {
         std::cout << "Test 1.06 is done" << std::endl;
     }
 
-    // Изменение размера
+    // check of size change
     {
         SimpleVector<int> v(3);
         v[2] = 17;
-//        for (auto i = 0; i != v.GetSize(); ++i) std::cout << &v[i] << " "; std::cout << std::endl;
         v.Print(); 
         v.Resize(7);
-//        for (auto i = 0; i != v.GetSize(); ++i) std::cout << &v[i] << " "; std::cout << std::endl;
         v.Print();
         assert(v.GetSize() == 7);
         assert(v.GetCapacity() >= v.GetSize());
@@ -111,44 +109,29 @@ inline void Test1() {
         v[0] = 1;
         v[1] = 1;
         v[2] = 1;
-        //std::cout << v.GetSize() << "/" << v.GetCapacity() << " " << v.begin() << std::endl;
-        //v.Print();
         v.Resize(old_size + 5);
-        //std::cout << v.GetSize() << "/" << v.GetCapacity() << " " << v.begin() << std::endl;
-        //v.Print();
         v[3] = 3;
         v[4] = 4;
         v[5] = 5;
         v[6] = 6;
         v[7] = 7;
-        //v[8] = 8;
-        //v.Print();
         v.Resize(old_size + 6);
-        //std::cout << v.GetSize() << "/" << v.GetCapacity() << " " << v.begin() << std::endl;
-        //v.Print();
         v.Resize(old_size + 8);
-        //std::cout << v.GetSize() << "/" << v.GetCapacity() << " " << v.begin() << std::endl;
-        //v.Print();
         v.Resize(old_size + 4);
-        //std::cout << v.GetSize() << "/" << v.GetCapacity() << " " << v.begin() << std::endl;
-        //v.Print();
         v.Resize(old_size + 6);
-        //std::cout << v.GetSize() << "/" << v.GetCapacity() << " " << v.begin() << std::endl;
-        //v.Print();
-        //assert(v[3] == 0);
         std::cout << "Test 1.09 is done" << std::endl;
     }
 
-    // Итерирование по SimpleVector
+    // check of iteration
     {
-        // Пустой вектор
+        // over empry vector
         {
             SimpleVector<int> v;
             assert(v.begin() == nullptr);
             assert(v.end() == nullptr);
         }
 
-        // Непустой вектор
+        // over non empty vector
         {
             SimpleVector<int> v(10, 42);
             assert(v.begin());
@@ -160,7 +143,7 @@ inline void Test1() {
 }
 
 inline void Test2() {
-    // PushBack
+    // check of PushBack 
     {
         SimpleVector<int> v(1);
         v.PushBack(42);
@@ -169,9 +152,9 @@ inline void Test2() {
         assert(v[0] == 0);
         assert(v[1] == 42);
         std::cout << "Test 2.01 is done" << std::endl;
-    }//*/
+    }
 
-    // Если хватает места, PushBack не увеличивает Capacity
+    // if there is enough space, PushBack does not increase capacity
     {
         SimpleVector<int> v(2);
         v.Resize(1);
@@ -182,7 +165,7 @@ inline void Test2() {
         std::cout << "Test 2.02 is done" << std::endl;
     }
 
-    // PopBack
+    // check of PopBack method
     {
         SimpleVector<int> v{ 0, 1, 2, 3 };
         const size_t old_capacity = v.GetCapacity();
@@ -192,9 +175,9 @@ inline void Test2() {
         assert(v.begin() == old_begin);
         assert((v == SimpleVector<int>{0, 1, 2}));
         std::cout << "Test 2.03 is done" << std::endl;
-    }//*/
+    }
 
-    // Конструктор копирования
+    // check of copy constructor
     {
         SimpleVector<int> numbers{ 1, 2 };
         auto numbers_copy(numbers);
@@ -207,7 +190,7 @@ inline void Test2() {
         std::cout << "Test 2.04 is done" << std::endl;
     }
 
-    // Сравнение
+    // check of comparisons
     {
         assert((SimpleVector{ 1, 2, 3 } == SimpleVector{ 1, 2, 3 }));
         assert((SimpleVector{1, 2, 3} != SimpleVector{1, 2, 2}));
@@ -222,7 +205,7 @@ inline void Test2() {
         std::cout << "Test 2.05 is done" << std::endl;
     }
 
-    // Обмен значений векторов
+    // check of exchange of verctor values
     {
         SimpleVector<int> v1{ 42, 666 };
         SimpleVector<int> v2;
@@ -247,9 +230,9 @@ inline void Test2() {
         assert(v1.GetCapacity() == capacity2);
         assert(v2.GetCapacity() == capacity1);
         std::cout << "Test 2.06 is done" << std::endl;
-    }//*/
+    }
 
-    // Присваивание
+    // check of =
     {
         SimpleVector<int> src_vector{ 1, 2, 3, 4 };
         SimpleVector<int> dst_vector{ 1, 2, 3, 4, 5, 6 };
@@ -258,7 +241,7 @@ inline void Test2() {
         std::cout << "Test 2.07 is done" << std::endl;
     }
 
-    // Вставка элементов
+    // check of Insert
     {
         SimpleVector<int> v{ 1, 2, 3, 4 };
         v.PushBack(5);
@@ -292,7 +275,7 @@ inline void Test2() {
     }
 
 
-    // Удаление элементов
+    // check of Erase
     {
         SimpleVector<int> v{ 1, 2, 3, 4 };
         v.Print();
@@ -300,9 +283,10 @@ inline void Test2() {
         v.Print();
         assert((v == SimpleVector<int>{1, 2, 4}));
         std::cout << "Test 2.12 is done" << std::endl;
-    }//*/
+    }
 }
 
+// test of reserve constructor
 void TestReserveConstructor() {
     using namespace std;
 
@@ -313,31 +297,25 @@ void TestReserveConstructor() {
     cout << "Done!"s << endl << endl;//*/
 }
 
+// test of Reserve
 void TestReserveMethod() {
     using namespace std;
 
     cout << "TestReserveMethod"s << endl;
     SimpleVector<int> v;
-    // зарезервируем 5 мест в векторе
     v.Reserve(5);
     assert(v.GetCapacity() == 5);
     assert(v.IsEmpty());
 
-    // попытаемся уменьшить capacity до 1
     v.Reserve(1);
-    // capacity должно остаться прежним
     assert(v.GetCapacity() == 5);
-    // поместим 10 элементов в вектор
     for (int i = 0; i < 10; ++i) {
         v.PushBack(i);
     }
     assert(v.GetSize() == 10);
-    // увеличим capacity до 100
     v.Reserve(100);
-    // проверим, что размер не поменялся
     assert(v.GetSize() == 10);
     assert(v.GetCapacity() == 100);
-    // проверим, что элементы на месте
     for (int i = 0; i < 10; ++i) {
         assert(v[i] == i);
     }
@@ -375,6 +353,7 @@ SimpleVector<int> GenerateVector(size_t size) {
     return v;
 }
 
+// other tests
 void TestTemporaryObjConstructor() {
     const size_t size = 1000000;
     std::cout << "Test with temporary object, copy elision" << std::endl;
@@ -390,7 +369,7 @@ void TestTemporaryObjOperator() {
     assert(moved_vector.GetSize() == 0);
     moved_vector = GenerateVector(size);
     assert(moved_vector.GetSize() == size);
-    std::cout << "Done!" << std::endl << std::endl;//*/
+    std::cout << "Done!" << std::endl << std::endl;
 }
 
 void TestNamedMoveConstructor() {
@@ -402,7 +381,7 @@ void TestNamedMoveConstructor() {
     SimpleVector<int> moved_vector(std::move(vector_to_move));
     assert(moved_vector.GetSize() == size);
     assert(vector_to_move.GetSize() == 0);
-    std::cout << "Done!" << std::endl << std::endl;//*/
+    std::cout << "Done!" << std::endl << std::endl;
 }
 
 void TestNamedMoveOperator() {
@@ -414,7 +393,7 @@ void TestNamedMoveOperator() {
     SimpleVector<int> moved_vector = std::move(vector_to_move);
     assert(moved_vector.GetSize() == size);
     assert(vector_to_move.GetSize() == 0);
-    std::cout << "Done!" << std::endl << std::endl;//*/
+    std::cout << "Done!" << std::endl << std::endl;
 }
 
 void TestNoncopiableMoveConstructor() {
@@ -432,7 +411,7 @@ void TestNoncopiableMoveConstructor() {
     for (size_t i = 0; i < size; ++i) {
         assert(moved_vector[i].GetX() == i);
     }
-    std::cout << "Done!" << std::endl << std::endl;//*/
+    std::cout << "Done!" << std::endl << std::endl;
 }
 
 void TestNoncopiablePushBack() {
@@ -448,7 +427,7 @@ void TestNoncopiablePushBack() {
     for (size_t i = 0; i < size; ++i) {
         assert(v[i].GetX() == i);
     }
-    std::cout << "Done!" << std::endl << std::endl;//*/
+    std::cout << "Done!" << std::endl << std::endl;
 }
 
 void TestNoncopiableInsert() {
@@ -459,19 +438,19 @@ void TestNoncopiableInsert() {
         v.PushBack(X(i));
     }
 
-    // в начало
+    // to the begining
     v.Insert(v.begin(), X(size + 1));
     assert(v.GetSize() == size + 1);
     assert(v.begin()->GetX() == size + 1);
-    // в конец
+    // to the end
     v.Insert(v.end(), X(size + 2));
     assert(v.GetSize() == size + 2);
     assert((v.end() - 1)->GetX() == size + 2);
-    // в середину
+    // to the middle
     v.Insert(v.begin() + 3, X(size + 3));
     assert(v.GetSize() == size + 3);
     assert((v.begin() + 3)->GetX() == size + 3);
-    std::cout << "Done!" << std::endl << std::endl;//*/
+    std::cout << "Done!" << std::endl << std::endl;
 }
 
 void TestNoncopiableErase() {
@@ -484,8 +463,5 @@ void TestNoncopiableErase() {
 
     auto it = v.Erase(v.begin());
     assert(it->GetX() == 1);
-    std::cout << "Done!" << std::endl << std::endl;//*/
+    std::cout << "Done!" << std::endl << std::endl;
 }
-
-
-
